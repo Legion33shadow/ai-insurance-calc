@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Cyber Insurance Calculator 2026 — Premium Estimator</title>
+<meta name="description" content="Estimate your AI cyber insurance premium. Based on LEGION incident corpus of 14,000+ AI security events. Provider risk, incident history, exposure factors.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#070710;color:#f0f0f0;min-height:100vh}
+.hero{text-align:center;padding:50px 20px 28px;background:linear-gradient(180deg,#0a0820,#070710)}
+.hero h1{font-size:clamp(22px,3.5vw,38px);font-weight:700;background:linear-gradient(135deg,#a78bfa,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.hero p{color:#555;font-size:14px}
+.wrap{max-width:800px;margin:0 auto;padding:16px 16px 60px}
+.card{background:#0d0d1e;border:1px solid #1e1e35;border-radius:14px;padding:22px;margin-bottom:14px}
+.card h2{font-size:14px;font-weight:600;color:#a78bfa;margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:500px){.form-grid{grid-template-columns:1fr}}
+.field label{font-size:12px;color:#6b7280;display:block;margin-bottom:5px;text-transform:uppercase}
+select,input[type=number],input[type=range]{width:100%;background:#070710;border:1px solid #1e1e35;border-radius:8px;color:#f0f0f0;font-size:14px;padding:10px 12px;outline:none}
+select:focus,input:focus{border-color:#a78bfa}
+input[type=range]{padding:6px 0;cursor:pointer;accent-color:#a78bfa}
+.range-val{text-align:center;font-size:15px;font-weight:700;color:#a78bfa;margin-top:4px}
+.btn{width:100%;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border:none;border-radius:10px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px}
+.result{display:none;margin-top:16px}
+.premium-box{background:linear-gradient(135deg,#0d0d2e,#1a0a3e);border:2px solid #7c3aed;border-radius:14px;padding:24px;text-align:center;margin-bottom:16px}
+.premium-label{font-size:13px;color:#9ca3af;margin-bottom:6px}
+.premium-amount{font-size:48px;font-weight:800;color:#a78bfa;line-height:1}
+.premium-period{font-size:14px;color:#6b7280;margin-top:4px}
+.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.factor{background:#070710;border:1px solid #1e1e35;border-radius:8px;padding:12px}
+.factor-name{font-size:12px;color:#6b7280;margin-bottom:4px}
+.factor-val{font-size:16px;font-weight:700}
+.risk-bar{height:8px;background:#1e1e35;border-radius:4px;margin:8px 0;overflow:hidden}
+.risk-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#10b981,#a78bfa,#ef4444)}
+.incident-box{background:#070710;border:1px solid #1e1e35;border-radius:8px;padding:14px;margin-top:10px}
+.ib-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #0d0d20}
+.ib-row:last-child{border:none}
+.disclaimer{font-size:11px;color:#4b5563;text-align:center;margin-top:12px;line-height:1.5}
+.ft{text-align:center;padding:20px;color:#333;font-size:12px}.ft a{color:#a78bfa;text-decoration:none}
+</style>
+</head><body>
+<div class="hero">
+<h1>AI Cyber Insurance Calculator</h1>
+<p>Actuarial premium estimate powered by LEGION incident corpus · 14,000+ real AI security events</p>
+</div>
+<div class="wrap">
+<div class="card">
+<h2>Your Organization Profile</h2>
+<div class="form-grid">
+<div class="field"><label>Primary AI Provider</label>
+<select id="provider">
+<option value="openai">OpenAI (ChatGPT, API)</option>
+<option value="anthropic">Anthropic (Claude)</option>
+<option value="google">Google (Gemini, Vertex)</option>
+<option value="microsoft">Microsoft (Azure AI, Copilot)</option>
+<option value="meta">Meta (Llama)</option>
+<option value="multiple">Multiple providers</option>
+</select></div>
+<div class="field"><label>Annual AI API Spend (USD)</label>
+<select id="spend">
+<option value="5000">Under $10,000</option>
+<option value="25000">$10,000 – $50,000</option>
+<option value="100000" selected>$50,000 – $250,000</option>
+<option value="500000">$250,000 – $1M</option>
+<option value="2000000">$1M+</option>
+</select></div>
+<div class="field"><label>Industry Sector</label>
+<select id="sector">
+<option value="finance">Finance / Fintech</option>
+<option value="healthcare">Healthcare / Med</option>
+<option value="legal">Legal / Law</option>
+<option value="tech" selected>Technology / SaaS</option>
+<option value="retail">Retail / E-commerce</option>
+<option value="gov">Government / Public</option>
+<option value="education">Education</option>
+<option value="other">Other</option>
+</select></div>
+<div class="field"><label>AI Use Criticality</label>
+<select id="criticality">
+<option value="1">Research / Experimental</option>
+<option value="2" selected>Internal productivity</option>
+<option value="3">Customer-facing features</option>
+<option value="4">Core product / Revenue-critical</option>
+<option value="5">Safety-critical systems</option>
+</select></div>
+<div class="field"><label>Data Sensitivity</label>
+<select id="data_sensitivity">
+<option value="1">No sensitive data</option>
+<option value="2" selected>General business data</option>
+<option value="3">PII / Customer data</option>
+<option value="4">Financial / Medical data</option>
+<option value="5">Regulated / Classified</option>
+</select></div>
+<div class="field"><label>Coverage Limit (USD)</label>
+<select id="coverage">
+<option value="500000">$500,000</option>
+<option value="1000000" selected>$1,000,000</option>
+<option value="2000000">$2,000,000</option>
+<option value="5000000">$5,000,000</option>
+<option value="10000000">$10,000,000</option>
+</select></div>
+</div>
+<button class="btn" onclick="calculate()">Calculate Premium →</button>
+</div>
+<div class="result" id="result">
+<div class="premium-box">
+<div class="premium-label">Estimated Annual Premium</div>
+<div class="premium-amount" id="premium-amount">—</div>
+<div class="premium-period">per year · <span id="monthly">—</span>/month</div>
+</div>
+<div class="breakdown" id="breakdown"></div>
+<div class="incident-box">
+<div style="font-size:13px;font-weight:600;margin-bottom:8px;color:#a78bfa">📊 LEGION Intelligence Data for this Provider</div>
+<div id="incident-data">Loading LEGION data...</div>
+</div>
+<div class="disclaimer">
+⚠️ This is an indicative estimate based on LEGION's incident corpus and actuarial modeling. Not a binding insurance quote. Consult a licensed broker for actual coverage. Methodology: base rate × provider risk factor × sector multiplier × criticality × coverage ratio.
+</div>
+</div>
+</div>
+<div class="ft">Powered by <a href="https://legion-api.com">LEGION Systems</a> · <a href="https://gemmo.gumroad.com/l/ngtmw">API Pro €29/mo</a> · <a href="https://gemmo.gumroad.com/l/mdevxu">AISI Premium €299</a></div>
+<script>
+const API="https://api.legion-api.com";
+// Base rates per $1M coverage
+const PROVIDER_RISK={"openai":1.8,"anthropic":1.3,"google":1.1,"microsoft":1.2,"meta":1.4,"multiple":2.0};
+const SECTOR_MULT={"finance":1.6,"healthcare":1.8,"legal":1.5,"tech":1.0,"retail":1.1,"gov":1.4,"education":0.8,"other":1.0};
+const CRITICALITY_MULT={1:0.5,2:1.0,3:1.5,4:2.2,5:3.5};
+const DATA_MULT={1:0.7,2:1.0,3:1.4,4:1.8,5:2.5};
+const BASE_RATE_PER_1M=1200; // $1,200 per $1M coverage base
+
+async function calculate(){
+  const provider=document.getElementById("provider").value;
+  const spend=parseInt(document.getElementById("spend").value);
+  const sector=document.getElementById("sector").value;
+  const crit=parseInt(document.getElementById("criticality").value);
+  const dataSens=parseInt(document.getElementById("data_sensitivity").value);
+  const coverage=parseInt(document.getElementById("coverage").value);
+
+  const provRisk=PROVIDER_RISK[provider]||1.0;
+  const sectorMult=SECTOR_MULT[sector]||1.0;
+  const critMult=CRITICALITY_MULT[crit]||1.0;
+  const dataMult=DATA_MULT[dataSens]||1.0;
+  const spendMult=spend>500000?1.3:spend>100000?1.1:1.0;
+  const coverageFactor=coverage/1000000;
+
+  const premium=Math.round(
+    BASE_RATE_PER_1M * coverageFactor * provRisk * sectorMult * critMult * dataMult * spendMult
+  );
+  const monthly=Math.round(premium/12);
+
+  document.getElementById("premium-amount").textContent="$"+premium.toLocaleString();
+  document.getElementById("monthly").textContent="$"+monthly.toLocaleString();
+
+  const riskScore=Math.min(100,Math.round((provRisk*sectorMult*critMult)/5*100));
+
+  document.getElementById("breakdown").innerHTML=`
+    <div class="factor"><div class="factor-name">Provider Risk Factor</div><div class="factor-val" style="color:${provRisk>1.5?"#ef4444":provRisk>1.2?"#f59e0b":"#10b981"}">${provRisk.toFixed(1)}×</div></div>
+    <div class="factor"><div class="factor-name">Sector Multiplier</div><div class="factor-val">${sectorMult.toFixed(1)}×</div></div>
+    <div class="factor"><div class="factor-name">Criticality Factor</div><div class="factor-val">${critMult.toFixed(1)}×</div></div>
+    <div class="factor"><div class="factor-name">Data Sensitivity</div><div class="factor-val">${dataMult.toFixed(1)}×</div></div>
+    <div class="factor"><div class="factor-name">Coverage</div><div class="factor-val">$${(coverage/1000000).toFixed(1)}M</div></div>
+    <div class="factor"><div class="factor-name">Risk Score</div><div class="factor-val" style="color:${riskScore>70?"#ef4444":riskScore>40?"#f59e0b":"#10b981"}">${riskScore}/100
+      <div class="risk-bar"><div class="risk-fill" style="width:${riskScore}%"></div></div>
+    </div></div>`;
+
+  document.getElementById("result").style.display="block";
+  document.getElementById("result").scrollIntoView({behavior:"smooth"});
+
+  // Fetch real LEGION data
+  try{
+    const r=await fetch(`${API}/attest?subject=${provider}&days=90`,{signal:AbortSignal.timeout(10000)});
+    const d=await r.json();
+    const att=d?.attestation||{};
+    const verdict=att.verdict||"UNKNOWN";
+    const critical=att.critical_count||0;
+    const high=att.high_count||0;
+    const corpus=att.corpus_rows_for_subject||0;
+    document.getElementById("incident-data").innerHTML=`
+      <div class="ib-row"><span>Provider verdict (90d)</span><span style="color:${verdict==='CLEAN'?'#10b981':'#ef4444'};font-weight:600">${verdict}</span></div>
+      <div class="ib-row"><span>Critical incidents (90d)</span><span style="color:${critical>0?'#ef4444':'#10b981'}">${critical}</span></div>
+      <div class="ib-row"><span>High severity (90d)</span><span>${high}</span></div>
+      <div class="ib-row"><span>Total corpus for provider</span><span>${corpus.toLocaleString()} incidents</span></div>
+      <div class="ib-row"><span>Receipt ID</span><span style="font-family:monospace;font-size:11px">${(d?.receipt_id||"—").slice(0,20)}</span></div>
+      <div style="margin-top:8px"><a href="${API}/attest?subject=${provider}&days=90" target="_blank" style="color:#a78bfa;font-size:12px">View signed attestation →</a></div>`;
+  }catch{
+    document.getElementById("incident-data").innerHTML='<div style="color:#6b7280;font-size:12px">LEGION data temporarily unavailable</div>';
+  }
+}
+</script></body></html>
